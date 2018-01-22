@@ -1,7 +1,14 @@
 const userService = require('../../services/user.js');
 
-const getUsers = function(req, res) {
+const getUsers = (req, res) => {
   userService.getAllUsers(res);
 }
 
-module.exports.getUsers = getUsers;
+const addUsers = (req, res) => {
+  userService.addUsers(req, res);  
+}
+
+module.exports = {
+  getUsers,
+  addUsers
+}

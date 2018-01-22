@@ -1,12 +1,17 @@
-const express = require('express');
 const bodyParser = require('body-parser');
+const express = require('express');
 const mongoose = require('mongoose');
 
 const app = express();
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({extended: true})); 
 global.router = express.Router();
+
+app.use('/', router);
 
 require('./config/dependency-include.js');
 require('./routes');
+require('./models');
 
 const db = require('./config/configure-db.js');
 db();
@@ -15,10 +20,6 @@ router.use((req, res, next) => {
   console.log(req.method, req.url);
   next(); 
 });
-
-app.use('/', router);
-app.use(bodyParser.json()); 
-app.use(bodyParser.urlencoded({extended : true})); 
 
 const server = app.listen(8081, () => {
   const host = server.address().address

@@ -35,6 +35,24 @@ const addUsers = (req, res) => {
   });
 };
 
+const deleteUsers = (req, res) => {
+  const userData = req.body.id;
+  var newUser = new User(userData)
+  newUser.findOneAndDelete((err, user) => {
+    const obj = {
+      message: err ? 'Please check the fields' : 'User has been successfully added',
+      statusCode: err ? 400 : 200,
+    }
+    configurationSettings.responseUtils.responseHandler(
+      res, 
+      null, 
+      obj.message, 
+      err, 
+      obj.statusCode
+    )   
+  });
+};
+
 module.exports = {
   getAllUsers,
   addUsers  

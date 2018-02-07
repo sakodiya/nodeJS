@@ -1,12 +1,14 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
+const passportAuth = require('./config/passport-auth')();
 
 const app = express();
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({extended: true})); 
-global.router = express.Router();
+app.use(passportAuth.initialize());
 
+global.router = express.Router();
 app.use('/', router);
 
 require('./config/dependency-include.js');

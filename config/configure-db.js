@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 module.exports = () => {
-  const dbConnection = mongoose.connect('mongodb://localhost/blog'); 
+  const dbConnection = mongoose.connect('mongodb://localhost/blog-latest'); 
   mongoose.connection.on('open', (res) => {
     console.log('Connected to mongo server.');
   });

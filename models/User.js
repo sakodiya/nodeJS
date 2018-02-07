@@ -20,14 +20,15 @@ const UserSchema = new Schema({
     trim: true,
     validate: [validateEmail, "enter correct email"]
   },
-  username: {
-    type: String,
-    unique: true,
-    trim: true,
-  },
   password: { 
     type: String, 
     required: true 
+  },
+  authToken: {
+    type: String 
+  },
+  createdAt: {
+    type: Date
   }
 });
 
@@ -43,6 +44,7 @@ UserSchema.pre('save', function(next) {
     bcrypt.hash(user.password, salt, function(err, hash) {
       if (err) return next(err);
       user.password = hash;
+      user.createdAt = new Date();
       next();
     });
   });
@@ -50,9 +52,10 @@ UserSchema.pre('save', function(next) {
 
 UserSchema.methods.comparePassword = function(userPassword, cb) {
   bcrypt.compare(userPassword, this.password, function(err, isMatch) {
-      if (err) return cb(err);
-      cb(null, isMatch);
-  });
+    if (err) return cb(err);
+    const errMsg = !isMatch ? "password is invalid" : null;
+    cb(errMsg, this);
+  });    
 };
 
 const User = mongoose.model('User', UserSchema);

@@ -1,4 +1,6 @@
 const User = require('../models/User');
+const async = require('async');
+const authConfigHelper = require('./authentication');
 
 const getAllUsers = (res) => {
   User.find((err, response) => {
@@ -17,7 +19,7 @@ const getAllUsers = (res) => {
   });
 };
 
-const addUsers = (req, res) => {
+const addUser = (req, res) => {
   const userData = req.body;
   var newUser = new User(userData)
   newUser.save((err, user) => {
@@ -35,7 +37,7 @@ const addUsers = (req, res) => {
   });
 };
 
-const deleteUsers = (req, res) => {
+const deleteUser = (req, res) => {
   const userData = req.body.id;
   var newUser = new User(userData)
   newUser.findOneAndDelete((err, user) => {
@@ -53,8 +55,47 @@ const deleteUsers = (req, res) => {
   });
 };
 
+const authenticateUser = (email, password, res) => {
+  User.findOne({email}, (err, userData) => {
+    if (err || !userData) {
+      // send message
+      configurationSettings.responseUtils.responseHandler(
+        res, 
+        null, 
+        'Email is invalid', 
+        err, 
+        401
+      )
+    } else {
+      async.waterfall([
+        function(cb) {
+          userData.comparePassword(password, cb)
+        },
+        function(userData, cb) {
+          authConfigHelper.getToken(userData, cb)  
+        }, 
+        function(userData, token, cb) {
+          authConfigHelper.updateUser(userData, token, cb)  
+        }
+      ], (error, response) => {
+        console.log('error',error)
+        configurationSettings.responseUtils.responseHandler(
+          res, 
+          error ? {} : response, 
+          error, 
+          error, 
+          error ? 404 : 200
+        ) 
+      })
+    } 
+  })
+};
+
 module.exports = {
   getAllUsers,
-  addUsers  
+  addUser,
+  deleteUser,
+  authenticateUser  
 }
+
 

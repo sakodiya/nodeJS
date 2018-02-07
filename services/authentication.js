@@ -12,8 +12,10 @@ const getToken = function(user, cb) {
 };
 
 const updateUser = (user, token, cb) => {
-  User.update({_id: user['_id']}, {'$set': {authToken: token}}, (err, res) => {
+  console.log('user',user['_id'])
+  User.update({_id: user['_id']}, {'$set': {'authToken': token}}, (err, res) => {
     if (err) return cb(err)
+    console.log('response', res)
     cb(null, 'JWT ' + token)
   });
 }

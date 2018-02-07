@@ -75,10 +75,10 @@ const authenticateUser = (email, password, res) => {
           authConfigHelper.getToken(userData, cb)  
         }, 
         function(userData, token, cb) {
+          // console.log('userData____', userData)
           authConfigHelper.updateUser(userData, token, cb)  
         }
       ], (error, response) => {
-        console.log('error',error)
         configurationSettings.responseUtils.responseHandler(
           res, 
           error ? {} : response, 

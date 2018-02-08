@@ -19,15 +19,15 @@ const addPost = (req, res) => {
 };
 
 const userPost = (req, res) => {
-  const postID = req.body.id;
+  const userId = req.body.id;
   Post
-    .find({author: postID})
-    .populate('author', 'firstName')
+    .find({author: userId})
+    .populate('author', '-password -authToken')
     .exec((err, response) => {
       configurationSettings.responseUtils.responseHandler(
         res, 
         response, 
-        err ? 'Please check the fields' : 'Post has been successfully created', 
+        err ? 'Please check the fields' : 'success', 
         err, 
         err ? 400 : 200
       ) 

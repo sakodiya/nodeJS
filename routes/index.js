@@ -1,4 +1,4 @@
-const routingFiles = ['user', 'post'];
+const routingFiles = ['user', 'post', 'comment'];
 
 routingFiles.forEach((routeFile) => {
   const routePath = require('./' + routeFile + '.js');

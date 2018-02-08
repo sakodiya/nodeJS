@@ -32,4 +32,31 @@ const addComment = (req, res) => {
   })
 }
 
-module.exports = {addComment}
+const getCommentsByPost = (req, res) => {
+  const {postId, userId} = req.body;
+  Post.findOne({_id: postId}, (err, postRes) => {
+    if (err || !postRes) {
+      configurationSettings.responseUtils.responseHandler(
+        res, 
+        null, 
+        'Invalid post', 
+        err, 
+        400
+      ) 
+    } else {
+      Comment.find({postId, author: userId})
+      .populate('author', '-authToken -password -createdAt')
+      .exec((err, response) => {
+        configurationSettings.responseUtils.responseHandler(
+          res, 
+          err ? {} : response, 
+          err ? 'Error occuring while fetching the comments' : 'Comments fetched!!', 
+          err, 
+          err ? 400 : 200
+        )           
+      })
+    }  
+  })  
+}
+
+module.exports = {addComment, getCommentsByPost}

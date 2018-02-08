@@ -9,6 +9,13 @@ const addComment = (req, res) => {
   commentService.addComment(req, res);  
 }
 
+const getCommentsByPost = (req, res) => {
+  const tokenInfo = methodHelper.getInfoByToken(req);
+  req.body.userId = tokenInfo.payload['_id'];
+  commentService.getCommentsByPost(req, res);
+}
+
 module.exports = {
   addComment,
+  getCommentsByPost
 }

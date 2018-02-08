@@ -1,7 +1,6 @@
 const Post = require('../models/Post');
 
 const addPost = (req, res) => {
-  console.log('add post method called');
   const postData = req.body;
   const newPost = new Post(postData)
   newPost.save((err, user) => {

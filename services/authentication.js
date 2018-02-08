@@ -4,7 +4,8 @@ const User = require('../models/User');
 
 const getToken = function(user, cb) {
   const {_id, firstName, lastName} = user;
-  const token = jwt.sign({_id, firstName, lastName},
+  const token = jwt.sign(
+    {_id, firstName, lastName},
     jwtConfig.jwtSecret, 
     {expiresIn: '1h'}
   );
@@ -15,7 +16,6 @@ const updateUser = (user, token, cb) => {
   console.log('user',user['_id'])
   User.update({_id: user['_id']}, {'$set': {'authToken': token}}, (err, res) => {
     if (err) return cb(err)
-    console.log('response', res)
     cb(null, 'JWT ' + token)
   });
 }

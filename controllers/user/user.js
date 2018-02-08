@@ -14,8 +14,14 @@ const authenticateUser = (req, res) => {
   userService.authenticateUser(userName, password, res);  
 }
 
+const logoutUser = (req, res) => {
+  const token = req.headers['authorization'].split(' ')[1];
+  userService.logoutUser(token, res);  
+}
+
 module.exports = {
   getUsers,
   addUser,
-  authenticateUser
+  authenticateUser,
+  logoutUser
 }

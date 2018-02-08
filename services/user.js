@@ -89,13 +89,27 @@ const authenticateUser = (email, password, res) => {
       })
     } 
   })
-};
+}
+
+const logoutUser = (authToken, res) => {
+  User.findOneAndUpdate({authToken}, {'$set': {'authToken': null}}, (err, response) => {
+    const error = err || !response;
+    configurationSettings.responseUtils.responseHandler(
+      res, 
+      {}, 
+      error ? 'Error while logout the current user' : 'User successfully logout', 
+      error, 
+      error ? 400 : 200
+    ) 
+  })
+}
 
 module.exports = {
   getAllUsers,
   addUser,
   deleteUser,
-  authenticateUser  
+  authenticateUser,
+  logoutUser  
 }
 
 
